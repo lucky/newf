@@ -1,3 +1,13 @@
+#
+# Newf: A New Python (web) Framework
+#    http://github.com/JaredKuolt/newf/tree/master 
+#
+# Copyright 2008 Jared Kuolt
+# Distributed under the MIT License. See LICENSE for more details
+#
+# See example_app.py for usage.
+#
+
 import cgi
 import re
 
