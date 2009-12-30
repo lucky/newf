@@ -10,6 +10,8 @@
 
 import cgi
 import re
+import cgitb
+import sys
 
 class Request(object):
     
@@ -116,7 +118,9 @@ class ResponseRedirect(Response):
     
 class Application(object):
     
-    def __init__(self, urls):
+    def __init__(self, urls, debug=False, system_error_msg='<h1>500 Error</h1><pre>Got Exception: %s</pre>'):
+        self.debug = debug
+        self.system_error_msg = system_error_msg
         self.urls = tuple((re.compile(a), b) for a,b in urls)
     
     def __call__(self, environ, start_response):
@@ -129,7 +133,9 @@ class Application(object):
                 try:
                     response = url[1](request, **match.groupdict())
                 except Exception, e:
-                    msg = '<h1>500 Error</h1><pre>%s</pre>' % e
+                    msg = self.system_error_msg % e
+                    if self.debug:
+                        msg += '<hr><h2>Traceback is:</h2> %s ' % cgitb.html(sys.exc_info())
                     response = Response(msg, status_code=500)
                 finally:
                     break

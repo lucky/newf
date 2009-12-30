@@ -6,12 +6,18 @@ def foo(request):
 def bar(request):
     return ResponseRedirect("/foo")
     
+    
+def test_debug(request):
+    raise Exception, 'I am the exception'
+    
+    
 urls = (
     (r'^/foo$', foo),
     (r'^/bar$', bar),
+    (r'^/test-debug$', test_debug),
 )
 
-application = Application(urls)
+application = Application(urls, debug=True)
 
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server
